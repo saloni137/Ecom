@@ -1,0 +1,33 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  image     String?
+  name      String?
+  products  Product?
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  categoryId   Category?          @relation(fields: [categoryIdId], references: [id])
+  categoryIdId String?            @unique
+  createdAt    DateTime           @default(now())
+  id           String             @id @default(cuid())
+  image        String?
+  name         String?
+  status       EnumProductStatus?
+  updatedAt    DateTime           @updatedAt
+}
+
+enum EnumProductStatus {
+  Sold
+  Available
+}
